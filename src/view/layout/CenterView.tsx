@@ -223,23 +223,6 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
                 </div>
 
                 <Button onClick={() => {
-                  this.add()
-                }}>添加目录</Button>
-                {
-                  node && !EtcdUtils.isRoot(node) && isArrEmpty(node.nodes) &&
-                  <Button
-                    type="danger"
-                    onClick={() => {
-                      EtcdService.delete(node).then(() => {
-
-                        Notification.success(`删除目录成功：${node.label}`);
-                        this.reload.call(this);
-                      }).catch(handleError);
-                    }}
-                  >删除目录</Button>
-                }
-
-                <Button onClick={() => {
                   this.add(false)
                 }}>添加值</Button>
 

@@ -29,4 +29,9 @@ export interface EtcdNodeBo extends EtcdNode {
    * 子数据节点
    */
   dataNodes?: EtcdNode[]
+
+  /**
+   * 加载子树的函数
+   */
+  resolve?: Function
 }

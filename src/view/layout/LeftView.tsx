@@ -90,27 +90,14 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
       url: url
     });
 
-    this.props.loading(true);
+    const root: EtcdNodeBo = {
+      key: '/'
+      , label: '/'
+      , dir: true
+    };
 
-    EtcdService.list(url).then((nodes: Array<EtcdNode>) => {
-
-      this.props.loading(false);
-
-      this.setState({
-        node: {
-          dirNodes: nodes
-        }
-      });
-    }).catch((err: AxiosResponse | string) => {
-
-      this.props.loading(false);
-
-      if(typeof err !== 'string') {
-        Notification.error('查询失败');
-        return;
-      }
-
-      Notification.error(err);
+    this.setState({
+      node: root
     });
   }
 
@@ -119,34 +106,40 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
    * @param data 节点
    * @param resolve 加载子节点的函数
    */
-  public loadNode(data: any, resolve: Function) {
+  public loadNode(data: any, resolve?: Function) {
 
     const node: EtcdNodeBo = data.data;
-
-    resolve([]);
 
     if(!node) {
       return;
     }
 
-    if(EtcdUtils.isRoot(node)) {
-      node.dirNodes = [];
+    if(!resolve) {
+      if(node.resolve) {
+        resolve = node.resolve;
+      } else {
+        throw new Error('resolve 不存在');
+      }
+    } else {
+      node.resolve = resolve;
     }
+
+    resolve([]);
 
     EtcdService.listNode(this.state.url, node).then(nodes => {
 
       const arr: Array<Array<EtcdNode>> = EtcdUtils.filterDirAndDataNodes(nodes);
-      if(!EtcdUtils.isRoot(node)) {
 
-        node.nodes = nodes;
-        node.dirNodes = arr[0];
-        resolve(node.dirNodes);
-      }
-
+      node.nodes = nodes;
+      node.dirNodes = arr[0];
       node.dataNodes = arr[1];
 
+      // @ts-ignore
+      resolve(node.dirNodes);
+
       this.showNode(node);
-    }).catch( () => {
+    }).catch(() => {
+      // @ts-ignore
       resolve([]);
     });
   }
@@ -163,7 +156,12 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
     centerView.show(node);
   }
 
-  append(store: any, data: EtcdNodeBo) {
+  /**
+   * 添加节点
+   * @param store
+   * @param etcdNode 节点数据
+   */
+  append(store: any, etcdNode: EtcdNodeBo) {
 
     MessageBox.prompt('请输入名称', '提示', {
       inputPattern: /[a-zA-Z0-9]{1,15}/
@@ -174,17 +172,18 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
 
       const label = value.value;
 
-      return EtcdService.add(data, label, '', true).then(() => {
+      return EtcdService.add(etcdNode, label, '', true).then(() => {
 
         const key = `/${label}`;
         const node: EtcdNodeBo = {
           dir: true
           , label: label
           , key: key
-          , url: `${data.url}${key}`
+          , url: `${etcdNode.url}${key}`
         };
 
-        store.append(node, data);
+        // store.append(node, data);
+        this.loadNode.call(this, etcdNode);
 
         Notification.success(`新增目录成功：${label}`);
       });

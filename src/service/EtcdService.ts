@@ -50,12 +50,12 @@ export class EtcdService {
 
       const root: EtcdNodeBo = {
         key: '/'
-        ,label: '/'
-        ,dir: true
+        , label: '/'
+        , dir: true
+        , nodes: nodes
       };
 
-      nodes.unshift(root);
-      return Promise.resolve(nodes);
+      return Promise.resolve([root]);
     }).catch(err => {
       return Promise.reject(err);
     });
