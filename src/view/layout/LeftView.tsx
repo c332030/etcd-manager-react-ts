@@ -52,7 +52,7 @@ interface PropTypes {
 interface StateTypes {
   url: string
 
-  node: EtcdNodeBo
+  nodes: EtcdNodeBo[]
 }
 
 export class LeftView extends React.Component<PropTypes, StateTypes>{
@@ -66,9 +66,7 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
 
   state: StateTypes = {
     url: ''
-    ,node: {
-      nodes: []
-    }
+    ,nodes: []
   };
 
   constructor(props: PropTypes){
@@ -84,7 +82,7 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
    * @param url Edcd 链接
    */
   public listKey(url: string) {
-    // console.log(`LeftView url= ${url}`);
+    console.log(`LeftView url= ${url}`);
 
     this.setState({
       url: url
@@ -97,7 +95,7 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
     };
 
     this.setState({
-      node: root
+      nodes: [root]
     });
   }
 
@@ -107,6 +105,9 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
    * @param resolve 加载子节点的函数
    */
   public loadNode(data: any, resolve?: Function) {
+
+    // debug('loadNode');
+    // debug(data);
 
     const node: EtcdNodeBo = data.data;
 
@@ -124,9 +125,17 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
       node.resolve = resolve;
     }
 
-    resolve([]);
+    // debug('resolve');
+    // debug(node.resolve);
+
+    // resolve([]);
 
     EtcdService.listNode(this.state.url, node).then(nodes => {
+
+      const url = node.url;
+      nodes.forEach((node: EtcdNodeBo) => {
+        node.url = url;
+      });
 
       const arr: Array<Array<EtcdNode>> = EtcdUtils.filterDirAndDataNodes(nodes);
 
@@ -147,7 +156,6 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
   showNode(node: EtcdNodeBo) {
 
     const centerView = this.props.center;
-
     if(!centerView) {
       return
     }
@@ -163,6 +171,12 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
    */
   append(store: any, etcdNode: EtcdNodeBo) {
 
+    debug('store');
+    debug(store);
+
+    debug('etcdNode');
+    debug(etcdNode);
+
     MessageBox.prompt('请输入名称', '提示', {
       inputPattern: /[a-zA-Z0-9]{1,15}/
       , inputErrorMessage: '请输入以字母和数字组成的名称'
@@ -172,23 +186,18 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
 
       const label = value.value;
 
-      return EtcdService.add(etcdNode, label, '', true).then(() => {
+      EtcdService.add(etcdNode, label, '', true).then(() => {
 
-        const key = `/${label}`;
-        const node: EtcdNodeBo = {
-          dir: true
-          , label: label
-          , key: key
-          , url: `${etcdNode.url}${key}`
-        };
-
-        // store.append(node, data);
-        this.loadNode.call(this, etcdNode);
+        this.loadNode.call(this, {
+          data: etcdNode
+        });
 
         Notification.success(`新增目录成功：${label}`);
+      }).catch(handleError).finally(() => {
+        this.props.loading(false);
       });
-    }).catch(handleError).finally(() => {
-      this.props.loading(false);
+    }).catch(() => {
+      // debug('取消添加');
     });
   }
 
@@ -222,7 +231,7 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
         <span>{node.label}</span>
       </span>
       <span style={{float: 'right', marginRight: '20px'}}>
-        <Button size="mini" onClick={ () => this.append(store, node) }>添加子目录</Button>
+        <Button size="mini" onClick={ () => this.append(store, node) }>添加</Button>
         {
           !EtcdUtils.isRoot(node) &&
           <Button size="mini" onClick={ () => this.remove(store, node) }>删除</Button>
@@ -243,7 +252,7 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
           <Tree
             ref={e => this.tree = e}
             className="filter-tree"
-            data={ this.state.node.dirNodes }
+            data={ this.state.nodes }
             options={ this.options }
             nodeKey="key"
             defaultExpandAll={false}

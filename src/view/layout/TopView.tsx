@@ -65,10 +65,6 @@ export class TopView extends React.Component<PropTypes, {}> {
 
   public listKey() {
 
-    log('listKey');
-
-    this.props.loading(true);
-
     this.props.listKey(
       this.state.prepend
       + this.state.url

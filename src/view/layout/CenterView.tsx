@@ -36,6 +36,7 @@ import {EtcdService} from "../../service";
 import AddView, {IAddView} from "./component/AddView";
 import {EtcdNodeBo} from "../../entity/bo/EtcdNodeBo";
 import {UpdateView} from "./component/UpdateView";
+import {LeftView} from "./LeftView";
 
 /**
  * Prop 类型
@@ -46,6 +47,8 @@ interface PropTypes {
 
   reload: Function
   reloadNode: Function
+
+  left?: LeftView
 }
 
 /**
@@ -100,8 +103,8 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
                   node.url = this.state.node && this.state.node.url;
                   EtcdService.update(node, value).then(() => {
 
+                    this.reload.call(this, this.state.node);
                     Notification.success(`更新成功：${node.label}`);
-                    this.reload.call(this);
                   }).catch(handleError);
                 }}
               />
@@ -137,8 +140,8 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
 
                 EtcdService.delete(node).then(() => {
 
+                  this.reload.call(this, this.state.node);
                   Notification.success(`删除成功：${node.label}`);
-                  this.reload.call(this);
                 }).catch(handleError);
               }}>删除</Button>
             </>
@@ -172,11 +175,20 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
     /* eslint-enable */
   }
 
-  reload() {
-    this.setState({
-      node: undefined
+  reload(node?: EtcdNodeBo) {
+    // this.setState({
+    //   node: undefined
+    // });
+    // this.props.reload();
+
+    const left = this.props.left;
+    if(!left) {
+      throw Error('leftView is not exist');
+    }
+
+    left.loadNode({
+      data: node
     });
-    this.props.reload();
   }
 
   /**
@@ -204,11 +216,11 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
         <AddView
           isJson={this.state.needFormatJson}
           setThis={ this.setAddView.bind(this) }
-          onAdd={(key: string, value: string, isDir: boolean) => {
-            EtcdService.add(this.state.node, key, value, isDir).then(() => {
+          onAdd={(key: string, value: string) => {
+            EtcdService.add(this.state.node, key, value, false).then(() => {
 
-              Notification.success(`新增${isDir ? '目录' : '值'}成功：${key}`);
-              this.reload.call(this);
+              this.reload.call(this, this.state.node);
+              Notification.success(`新增值成功：${key}`);
             }).catch(handleError);
           }}
         />

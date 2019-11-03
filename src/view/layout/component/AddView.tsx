@@ -47,11 +47,6 @@ interface StateTypes {
   visible: boolean
 
   /**
-   * 是否为目录
-   */
-  isDir?: boolean
-
-  /**
    * 是否为 Json
    */
   isJson: boolean
@@ -106,18 +101,21 @@ class AddView extends React.Component <PropTypes, StateTypes> {
     }
   }
 
-  display(visible: boolean, isDir?: boolean) {
+  display(visible: boolean) {
     this.setState({
       visible: visible
-      ,isDir: isDir
+      , key: ''
+      , value: ''
     });
+
+    const updateValue = this.state.updateValue;
+    updateValue && updateValue('');
   }
 
   render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
 
     const {
       visible
-      ,isDir
 
       ,key
       ,value
@@ -132,33 +130,30 @@ class AddView extends React.Component <PropTypes, StateTypes> {
           onCancel={ () => this.display.call(this, false) }
         >
           <Dialog.Body>
-            {
-              !this.state.isDir &&
-              <Switch
-                value={this.state.isJson}
-                onColor={"#13ce66"}
-                offColor={"#ff4949"}
-                onText={'JSON'}
-                offText={'字符串'}
-                width={75}
-                style={{
-                  margin: '0 1rem'
-                }}
-                onChange={isJson => {
-                  this.setState({
+            <Switch
+              value={this.state.isJson}
+              onColor={"#13ce66"}
+              offColor={"#ff4949"}
+              onText={'JSON'}
+              offText={'字符串'}
+              width={75}
+              style={{
+                margin: '0 1rem'
+              }}
+              onChange={isJson => {
+                this.setState({
 
-                    isJson: !!isJson
-                  }, () => {
+                  isJson: !!isJson
+                }, () => {
 
-                    if(value && value !== '{}') {
-                      return;
-                    }
+                  if(value && value !== '{}') {
+                    return;
+                  }
 
-                    this.state.updateValue && this.state.updateValue(isJson ? '{}' : '');
-                  });
-                }}
-              />
-            }
+                  this.state.updateValue && this.state.updateValue(isJson ? '{}' : '');
+                });
+              }}
+            />
             <Form >
               <Form.Item label={ Tools.get(KeyValueEnum, 'key', '键') }>
                 <Input
@@ -170,24 +165,21 @@ class AddView extends React.Component <PropTypes, StateTypes> {
                   }}
                 />
               </Form.Item>
-              {
-                !isDir &&
-                <ValueView
-                  value={value}
-                  needFormatJson={this.props.isJson}
+              <ValueView
+                value={value}
+                needFormatJson={this.props.isJson}
 
-                  setUpdate={(fun: Function) => {
-                    this.setState({
-                      updateValue: fun
-                    });
-                  }}
-                  onChange={(value: string) =>{
-                    this.setState({
-                      value: value
-                    });
-                  }}
-                />
-              }
+                setUpdate={(fun: Function) => {
+                  this.setState({
+                    updateValue: fun
+                  });
+                }}
+                onChange={(value: string) =>{
+                  this.setState({
+                    value: value
+                  });
+                }}
+              />
             </Form>
           </Dialog.Body>
 
@@ -195,19 +187,19 @@ class AddView extends React.Component <PropTypes, StateTypes> {
             <Button onClick={ () => this.display.call(this, false) }>取 消</Button>
             <Button type="primary" onClick={ () => {
 
-              const {isDir, key, value} = this.state;
+              const {key, value} = this.state;
 
               if(!key) {
                 Notification.error(`请输入${Tools.get(KeyValueEnum, 'key', '键')}`);
                 return;
               }
 
-              if(!isDir && !value) {
+              if(!value) {
                 Notification.error(`请输入${Tools.get(KeyValueEnum, 'value', '值')}`);
                 return;
               }
 
-              this.props.onAdd(key, value, isDir);
+              this.props.onAdd(key, value);
               this.display.call(this, false)
             }}>确 定</Button>
           </Dialog.Footer>

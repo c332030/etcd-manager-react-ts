@@ -2,6 +2,7 @@
 import {
   get
   ,debug
+  , isArrNotEmpty
 } from '@c332030/common-utils-ts'
 
 import {
@@ -107,11 +108,15 @@ export class EtcdService {
    */
   public static delete(node?: EtcdNodeBo): Promise<any> {
 
+    // debug('delete');
+    // debug(node);
+
     if(!node) {
       return Promise.reject('节点不存在');
     }
 
-    let { url, key, dir } = node;
+    const { url, dir } = node;
+    let { key } = node;
 
     if(!url) {
       return Promise.reject('链接为空');

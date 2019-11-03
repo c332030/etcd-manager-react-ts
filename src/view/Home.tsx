@@ -12,11 +12,12 @@ import {
   , LeftView
   , CenterView
 } from './layout';
+
 import {EtcdNode} from "../entity";
 
-// import {
-//   log
-// } from '@c332030/common-utils-ts'
+import {
+  debug
+} from '@c332030/common-utils-ts'
 
 /**
  * Props 类型定义
@@ -31,18 +32,15 @@ interface PropsTypes {
 interface StateTypes {
   loading?: boolean
 
-  view: {
-    top?: TopView
-    left?: LeftView
-    center?: CenterView
-  }
+  top?: TopView
+  left?: LeftView
+  center?: CenterView
 }
 
 class Home extends React.Component<PropsTypes, StateTypes> {
 
   state: StateTypes = {
     loading: false
-    , view: {}
   };
 
   /**
@@ -56,27 +54,27 @@ class Home extends React.Component<PropsTypes, StateTypes> {
   }
 
   setTop(_this: TopView) {
-    /* eslint-disable */
-    this.state.view.top = _this;
-    /* eslint-enable */
+    this.setState({
+      top: _this
+    });
   }
 
   setLeft(_this: LeftView) {
-    /* eslint-disable */
-    this.state.view.left = _this;
-    /* eslint-enable */
+    this.setState({
+      left: _this
+    });
   }
 
   setCenter(_this: CenterView) {
-    /* eslint-disable */
-    this.state.view.center = _this;
-    /* eslint-enable */
+    this.setState({
+      center: _this
+    });
   }
 
   listKey(url: string) {
     // console.log(`是吧 url= ${url}`);
 
-    let left: LeftView | undefined = this.state.view.left;
+    let left: LeftView | undefined = this.state.left;
     left && left.listKey(url);
   }
 
@@ -115,7 +113,7 @@ class Home extends React.Component<PropsTypes, StateTypes> {
             >
               <LeftView
                 setThis={this.setLeft.bind(this)}
-                center={this.state.view.center}
+                center={ this.state.center }
                 loading={this.loading.bind(this)}
               />
             </div>
@@ -130,9 +128,10 @@ class Home extends React.Component<PropsTypes, StateTypes> {
             >
               <CenterView
                 setThis={this.setCenter.bind(this)}
+                left={ this.state.left }
                 loading={this.loading.bind(this)}
                 reload={() => {
-                  this.state.view.top && this.state.view.top.listKey();
+                  this.state.top && this.state.top.listKey();
                 }}
                 reloadNode={(node: EtcdNode) => {
                   // this.state.view.left && this.state.view.left.showNode(node);

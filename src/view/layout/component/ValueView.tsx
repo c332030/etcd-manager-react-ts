@@ -243,7 +243,7 @@ class ValueView extends React.Component <PropTypes, StateTypes> {
 
   render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
 
-    const {value} = this.state;
+    const { value } = this.state;
 
     let jsonData;
 
