@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  Card,
+  Card, Layout,
   Loading
 } from 'element-react'
 
@@ -18,6 +18,7 @@ import {EtcdNode} from "../entity";
 import {
   debug
 } from '@c332030/common-utils-ts'
+import { ViewComponentStateTypes} from "../component";
 
 /**
  * Props 类型定义
@@ -29,7 +30,7 @@ interface PropsTypes {
 /**
  * State 类型定义
  */
-interface StateTypes {
+interface StateTypes extends ViewComponentStateTypes{
   loading?: boolean
 
   top?: TopView
@@ -81,66 +82,75 @@ class Home extends React.Component<PropsTypes, StateTypes> {
   render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
 
     return (
-      <>
+      <div>
         {this.state.loading && <Loading fullscreen={true}/>}
         <div
           style={{
             verticalAlign: 'top'
-            , width: '90%'
-            , margin: '2.5rem auto'
+            // , width: '90%'
+            // , height: '90vh'
+            , margin: '2.5rem 2rem 1rem 2rem'
           }}
         >
-          <Card>
-            <div
-              style={{
-                padding: '20px'
-                , width: '50rem'
-                , margin: '0 auto'
-              }}
-            >
-              <TopView
-                setThis={this.setTop.bind(this)}
-                loading={this.loading.bind(this)}
-                listKey={this.listKey.bind(this)}
-              />
-            </div>
-            <div
-              style={{
-                display: 'inline-block'
-                , padding: '10px'
-                , width: '25rem'
-              }}
-            >
-              <LeftView
-                setThis={this.setLeft.bind(this)}
-                center={ this.state.center }
-                loading={this.loading.bind(this)}
-              />
-            </div>
-            <div
-              style={{
-                display: 'inline-block'
-                , verticalAlign: 'top'
-                , width: '70%'
-                , padding: '20px'
-                // ,border: '1px solid red'
-              }}
-            >
-              <CenterView
-                setThis={this.setCenter.bind(this)}
-                left={ this.state.left }
-                loading={this.loading.bind(this)}
-                reload={() => {
-                  this.state.top && this.state.top.listKey();
+          <TopView
+            style = {{
+              padding: '20px'
+              , width: '50rem'
+              // , margin: '0 auto'
+            }}
+            setThis={this.setTop.bind(this)}
+            loading={this.loading.bind(this)}
+            listKey={this.listKey.bind(this)}
+          />
+          <Card
+            style={{
+              display: 'block'
+              , height: '90%'
+              , marginBottom: '1rem'
+            }}
+          >
+            <Layout.Row>
+              <Layout.Col span={6}>
+                <LeftView
+                  style={{
+                    margin: '0 1rem'
+                  }}
+                  setThis={this.setLeft.bind(this)}
+                  center={ this.state.center }
+                  loading={this.loading.bind(this)}
+                />
+              </Layout.Col>
+              <Layout.Col span={18}
+                style={{
+                  display: 'flex'
+                  , flexDirection: 'column'
+                  // , alignItems: 'stretch'
+                  // , marginBottom: '1rem'
+                  // , maxHeight: '90%'
                 }}
-                reloadNode={(node: EtcdNode) => {
-                  // this.state.view.left && this.state.view.left.showNode(node);
-                }}
-              />
-            </div>
+              >
+                <CenterView
+                  style={{
+                    verticalAlign: 'top'
+                    , margin: '0 1rem'
+                    // , padding: '20px'
+                    // ,border: '1px solid red'
+                  }}
+                  setThis={this.setCenter.bind(this)}
+                  left={ this.state.left }
+                  loading={this.loading.bind(this)}
+                  reload={() => {
+                    this.state.top && this.state.top.listKey();
+                  }}
+                  reloadNode={(node: EtcdNode) => {
+                    // this.state.view.left && this.state.view.left.showNode(node);
+                  }}
+                />
+              </Layout.Col>
+            </Layout.Row>
           </Card>
         </div>
-      </>
+      </div>
     );
   }
 }

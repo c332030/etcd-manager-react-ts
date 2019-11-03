@@ -21,6 +21,7 @@ import {
   ReactUtils
 } from '@c332030/common-react-ts'
 import ValueView from "./ValueView";
+import {ComponentPropTypes} from "../../../component";
 
 
 
@@ -28,11 +29,10 @@ import ValueView from "./ValueView";
 /**
  * Prop 类型
  */
-interface PropTypes {
+interface PropTypes extends ComponentPropTypes{
 
   isJson: boolean
 
-  setThis: Function
   onAdd: Function
 }
 

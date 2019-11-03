@@ -38,18 +38,16 @@ import {
 import {EtcdService} from "../../service";
 import {EtcdUtils, handleError, ReactTsUtils} from "../../util";
 import {EtcdNodeBo} from "../../entity/bo/EtcdNodeBo";
+import {ViewComponentPropTypes, ViewComponentStateTypes} from "../../component";
 
 /**
  * Prop 类型
  */
-interface PropTypes {
-  loading: Function
-  setThis: Function
-
+interface PropTypes extends ViewComponentPropTypes {
   center?: CenterView
 }
 
-interface StateTypes {
+interface StateTypes extends ViewComponentStateTypes {
   url: string
 
   nodes: EtcdNodeBo[]
@@ -128,7 +126,7 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
     // debug('resolve');
     // debug(node.resolve);
 
-    // resolve([]);
+    resolve([]);
 
     EtcdService.listNode(this.state.url, node).then(nodes => {
 
@@ -243,7 +241,7 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
   render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
 
     return (
-      <>
+      <div style={this.props.style}>
         <div style={{
         }}>
           <Input placeholder="输入关键字进行过滤"
@@ -269,7 +267,7 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
             renderContent={ this.renderContent.bind(this) }
           />
         </div>
-      </>
+      </div>
     );
   }
 }

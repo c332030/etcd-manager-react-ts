@@ -19,15 +19,13 @@ import {
 import {
   CookieUtils
 } from '@c332030/common-http-ts'
+import {ViewComponentPropTypes} from "../../component";
 
 const URL_LAST_NAME = 'url-last';
 
 const URL_HISTORY_NAME = 'url-history';
 
-interface PropTypes {
-  setThis: Function
-  loading: Function
-
+interface PropTypes extends ViewComponentPropTypes{
   listKey: Function
 }
 
@@ -76,10 +74,10 @@ export class TopView extends React.Component<PropTypes, {}> {
 
   render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
     return (
-      <>
+      <div style={ this.props.style }>
         <Input placeholder="请输入内容"
           style={{
-            width: '18rem'
+            width: '20rem'
           }}
           value={ this.state.url }
           prepend={
@@ -123,7 +121,7 @@ export class TopView extends React.Component<PropTypes, {}> {
             CookieUtils.set(URL_LAST_NAME, this.state.url);
           }}
         >查询</Button>
-      </>
+      </div>
     );
   }
 }

@@ -37,15 +37,13 @@ import AddView, {IAddView} from "./component/AddView";
 import {EtcdNodeBo} from "../../entity/bo/EtcdNodeBo";
 import {UpdateView} from "./component/UpdateView";
 import {LeftView} from "./LeftView";
+import {ViewComponentPropTypes} from "../../component";
 
 /**
  * Prop 类型
  */
-interface PropTypes {
-  loading: Function
-  setThis: Function
+interface PropTypes extends ViewComponentPropTypes {
 
-  reload: Function
   reloadNode: Function
 
   left?: LeftView
@@ -212,7 +210,7 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
     }
 
     return (
-      <>
+      <div style={this.props.style}>
         <AddView
           isJson={this.state.needFormatJson}
           setThis={ this.setAddView.bind(this) }
@@ -266,7 +264,7 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
             />
           }
         </Card>
-      </>
+      </div>
     );
   }
 }
