@@ -141,7 +141,7 @@ class ValueView extends React.Component <PropTypes, StateTypes> {
 
       arr.push({
         value: key
-        ,comment: value
+        , comment: value
       });
     });
 

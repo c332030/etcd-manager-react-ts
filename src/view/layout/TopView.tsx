@@ -9,116 +9,271 @@
 
 
 import React from "react";
-import {Button, Input, Select} from "element-react";
+import {AutoComplete, Button, Input, Select} from "element-react";
 
 import {
-  log
-  ,debug
+  isArrEmpty
+  , debug
+  , Tools
 } from '@c332030/common-utils-ts'
 
 import {
   CookieUtils
+  , SchemeEnum
+  , UrlConfig
+  , UrlUtils
 } from '@c332030/common-http-ts'
+
 import {ViewComponentPropTypes} from "../../component";
+import {EtcdConstants} from "../../model/constant";
 
-const URL_LAST_NAME = 'url-last';
-
-const URL_HISTORY_NAME = 'url-history';
+interface StateTypes {
+  url?: UrlConfig
+  urlArr: UrlConfig[]
+  urlMap: Map<string, UrlConfig>
+}
 
 interface PropTypes extends ViewComponentPropTypes{
   listKey: Function
 }
 
-export class TopView extends React.Component<PropTypes, {}> {
+/**
+ * 支持的 url 协议
+ */
+const SCHEMES = [
+  SchemeEnum.HTTP
+  , SchemeEnum.HTTPS
+];
+
+/**
+ * host AutoCompile 填充包装接口
+ */
+export interface UrlFetchSuggest {
+
+  /**
+   * 展示的文字
+   */
+  value: string
+
+  /**
+   * 链接信息
+   */
+  url: UrlConfig
+}
+
+export class TopView extends React.Component<PropTypes, StateTypes> {
 
   state = {
-    prepend: 'http://'
-    ,append: '/v2/keys'
 
-    ,url: 'localhost'
-    // ,url: 'config.work.c332030.com'
-    ,port: '2379'
+    url: {
+      scheme: SchemeEnum.HTTP
+      , host: 'localhost'
+      , port: 2379
+      , path: 'v2/keys'
+    }
 
-    ,schemes: [
-      'http://'
-      ,'https://'
-    ]
+    , urlArr: new Array<UrlConfig>()
+    , urlMap: new Map<string, UrlConfig>()
   };
 
   constructor(props: PropTypes) {
     super(props);
 
+    this.listKey.bind(this);
+    this.addUrlHistory.bind(this);
+
     this.props.setThis(this);
 
-    debug(CookieUtils.list());
+    // debug(CookieUtils.list());
 
-    const lastUrl = CookieUtils.get(URL_LAST_NAME);
+    const urlsJsonStr = CookieUtils.get(EtcdConstants.COOKIES_URLS);
 
-    debug(`lastUrl= ${lastUrl}`);
+    if(!urlsJsonStr) {
+      return;
+    }
+
+    const urlArr = JSON.parse(urlsJsonStr);
+    if(isArrEmpty(urlArr)) {
+      return;
+    }
+    debug('urlArr');
+    debug(urlArr);
+
+    this.state.urlArr = urlArr;
+
+    urlArr.forEach((url: UrlConfig) => {
+      this.state.urlMap.set(UrlUtils.getUrl(url), url);
+    });
+
+    const lastUrl: UrlConfig = urlArr[urlArr.length - 1];
+
+    debug(`lastUrl= ${UrlUtils.getUrl(lastUrl)}`);
+
+    const thisUrl = this.state.url;
+    let url;
 
     if(lastUrl) {
-      this.state.url = lastUrl;
+      url = lastUrl;
+    } else {
+      return;
+    }
+
+    if(url) {
+      const {
+        scheme
+        , host
+        , port
+        , path
+      } = url;
+
+      if(scheme) {
+        thisUrl.scheme = scheme;
+      }
+      if(host) {
+        thisUrl.host = host;
+      }
+      if(port) {
+        thisUrl.port = port;
+      }
+      if(path) {
+        thisUrl.path = path;
+      }
     }
   }
 
   public listKey() {
-
-    this.props.listKey(
-      this.state.prepend
-      + this.state.url
-      + ':'
-      + this.state.port
-      + this.state.append
-    );
+    this.props.listKey(UrlUtils.getUrl(this.state.url));
   }
 
-  render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
+  /**
+   * 添加输入历史
+   */
+  addUrlHistory() {
+
+    const {
+      url
+      , urlMap
+      , urlArr
+    } = this.state;
+    const urlStr = UrlUtils.getUrl(url);
+
+    debug(`urlStr: ${urlStr}`);
+
+    if(urlMap.has(urlStr)) {
+      debug('has');
+      return;
+    }
+    debug('not has');
+
+    urlMap.set(urlStr, url);
+
+    urlArr.push(Tools.clone(url));
+
+    while (urlArr.length > 10) {
+      urlArr.shift();
+    }
+
+    CookieUtils.set(EtcdConstants.COOKIES_URLS, JSON.stringify(this.state.urlArr));
+  }
+
+  querySearch(host?: string, resolve?: Function) {
+
+    this.setState({
+      url: Object.assign(this.state.url, {
+        host: host
+      })
+    });
+
+    if(!resolve) {
+      return;
+    }
+
+    const {
+      urlMap
+    } = this.state;
+    const entries = urlMap.entries();
+
+    const arr: UrlFetchSuggest[] = [];
+
+    let urlTemp;
+    while ((urlTemp = entries.next().value)) {
+
+      let [url, urlConfig] = urlTemp;
+
+      if(!host || url.indexOf(host) > 0) {
+        arr.push({
+          value: url
+          , url: urlConfig
+        });
+      }
+    }
+
+    resolve(arr);
+  }
+
+  render(): React.ReactElement | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
     return (
       <div style={ this.props.style }>
-        <Input placeholder="请输入内容"
+        <AutoComplete
+          placeholder="请输入内容"
+          value={ this.state.url.host }
           style={{
             width: '20rem'
           }}
-          value={ this.state.url }
           prepend={
-            <Select value={ this.state.prepend }
+            <Select value={ this.state.url.scheme }
               style={{ width: '5.5rem' }}
-              onChange={ e => this.setState({prepend: e}) }
+              onChange={
+                scheme => this.setState({
+                  url: Object.assign(this.state.url, {
+                    scheme: scheme
+                  })
+                })
+              }
             >
               {
-                this.state.schemes.map((scheme, index) =>
+                SCHEMES.map((scheme, index) =>
                   <Select.Option key={index} label={scheme} value={scheme} />
                 )
               }
             </Select>
           }
-          onChange={ (url) => {
+          fetchSuggestions={ this.querySearch.bind(this) }
+          onSelect={(host: UrlFetchSuggest) => {
             this.setState({
-              url: url
+              url: (host as UrlFetchSuggest).url
             });
-          } }
+          }}
         />
         <span> : </span>
         <Input
           style={{
             width: '4rem'
           }}
-          value={ this.state.port }
-          onChange={ e => this.setState({port: e}) }
+          value={ this.state.url.port }
+          onChange={ port => this.setState({
+            url: Object.assign(this.state.url, {
+              port: port
+            })
+          }) }
         />
         <span> / </span>
         <Input
           style={{
             width: '6rem'
           }}
-          value={ this.state.append }
-          onChange={ e => this.setState({append: e}) }
+          value={ this.state.url.path }
+          onChange={ path => this.setState({
+            url: Object.assign(this.state.url, {
+              path: path
+            })
+          }) }
         />
         <span> </span>
         <Button type="primary" icon="search"
           onClick={ () => {
-            this.listKey.call(this);
-            CookieUtils.set(URL_LAST_NAME, this.state.url);
+            this.listKey();
+            this.addUrlHistory();
           }}
         >查询</Button>
       </div>

@@ -20,9 +20,7 @@ import {
   // ,notEmpty
 } from '@c332030/common-utils-ts'
 
-import {
-  AxiosConfig
-} from '@c332030/common-http-ts'
+import {EtcdConfig} from "../entity/vo/EtcdConfig";
 
 const configJsonUrl = 'config.json';
 
@@ -34,7 +32,7 @@ class AxiosUtils {
   /**
    * Axios 配置信息
    */
-  private axiosConfig: AxiosConfig = {};
+  private axiosConfig: EtcdConfig = {};
 
   /**
    * Axios 实例
@@ -49,12 +47,16 @@ class AxiosUtils {
 
   constructor(){
 
+    this.getConfig.bind(this);
+
     this.axiosInstance.get(configJsonUrl).then(e => {
+
+      // console.debug('EtcdConfig');
+      // console.debug(e.data);
 
       this.axiosConfig = e.data;
       this.initInterceptors();
     }).catch(e => {
-
       log(e);
     });
   }
@@ -104,9 +106,16 @@ class AxiosUtils {
       return Promise.reject(response);
     });
   }
+
+  /**
+   * 获取默认配置
+   */
+  public getConfig() {
+    return this.axiosConfig;
+  }
 }
 
-const axiosUtils = new AxiosUtils();
+export const axiosUtils = new AxiosUtils();
 
 export const axiosGet = axiosUtils.axiosInstance.get;
 export const axiosPut = axiosUtils.axiosInstance.put;
