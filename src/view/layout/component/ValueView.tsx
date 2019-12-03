@@ -118,6 +118,10 @@ class ValueView extends React.Component <PropTypes, StateTypes> {
 
   querySearch(queryString?: string, resolve?: Function) {
 
+    this.setState({
+      newKey: queryString
+    });
+
     if(!resolve) {
       return;
     }
