@@ -29,7 +29,6 @@ import {EtcdConstants} from "../../model/constant";
 
 interface StateTypes {
   url?: UrlConfig
-  urlArr: UrlConfig[]
   urlMap: Map<string, UrlConfig>
 }
 
@@ -72,7 +71,6 @@ export class TopView extends React.Component<PropTypes, StateTypes> {
       , path: 'v2/keys'
     }
 
-    , urlArr: new Array<UrlConfig>()
     , urlMap: new Map<string, UrlConfig>()
   };
 
@@ -98,8 +96,6 @@ export class TopView extends React.Component<PropTypes, StateTypes> {
     }
     debug('urlArr');
     debug(urlArr);
-
-    this.state.urlArr = urlArr;
 
     urlArr.forEach((url: UrlConfig) => {
       this.state.urlMap.set(UrlUtils.getUrl(url), url);
@@ -153,27 +149,21 @@ export class TopView extends React.Component<PropTypes, StateTypes> {
     const {
       url
       , urlMap
-      , urlArr
     } = this.state;
     const urlStr = UrlUtils.getUrl(url);
 
     debug(`urlStr: ${urlStr}`);
 
-    if(urlMap.has(urlStr)) {
-      debug('has');
-      return;
-    }
-    debug('not has');
+    urlMap.delete(urlStr);
+    urlMap.set(urlStr, Tools.clone(url));
 
-    urlMap.set(urlStr, url);
+    let urlArr: UrlConfig[] = [];
 
-    urlArr.push(Tools.clone(url));
+    urlMap.forEach((url) => {
+      urlArr.push(url);
+    });
 
-    while (urlArr.length > 10) {
-      urlArr.shift();
-    }
-
-    CookieUtils.set(EtcdConstants.COOKIES_URLS, JSON.stringify(this.state.urlArr));
+    CookieUtils.set(EtcdConstants.COOKIES_URLS, JSON.stringify(urlArr));
   }
 
   querySearch(host?: string, resolve?: Function) {
@@ -208,7 +198,7 @@ export class TopView extends React.Component<PropTypes, StateTypes> {
       }
     }
 
-    resolve(arr);
+    resolve(arr.reverse());
   }
 
   render(): React.ReactElement | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {

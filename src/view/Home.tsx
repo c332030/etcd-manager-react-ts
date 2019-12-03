@@ -109,45 +109,34 @@ class Home extends React.Component<PropsTypes, StateTypes> {
               , marginBottom: '1rem'
             }}
           >
-            <Layout.Row>
-              <Layout.Col span={6}>
-                <LeftView
-                  style={{
-                    margin: '0 1rem'
-                  }}
-                  setThis={this.setLeft.bind(this)}
-                  center={ this.state.center }
-                  loading={this.loading.bind(this)}
-                />
-              </Layout.Col>
-              <Layout.Col span={18}
-                style={{
-                  display: 'flex'
-                  , flexDirection: 'column'
-                  // , alignItems: 'stretch'
-                  // , marginBottom: '1rem'
-                  // , maxHeight: '90%'
-                }}
-              >
-                <CenterView
-                  style={{
-                    verticalAlign: 'top'
-                    , margin: '0 1rem'
-                    // , padding: '20px'
-                    // ,border: '1px solid red'
-                  }}
-                  setThis={this.setCenter.bind(this)}
-                  left={ this.state.left }
-                  loading={this.loading.bind(this)}
-                  reload={() => {
-                    this.state.top && this.state.top.listKey();
-                  }}
-                  reloadNode={(node: EtcdNode) => {
-                    // this.state.view.left && this.state.view.left.showNode(node);
-                  }}
-                />
-              </Layout.Col>
-            </Layout.Row>
+            <LeftView
+              style={{
+                display: 'inline-block'
+                , margin: '1rem 1rem'
+                , width: '400px'
+              }}
+              setThis={this.setLeft.bind(this)}
+              center={ this.state.center }
+              loading={this.loading.bind(this)}
+            />
+            <CenterView
+              style={{
+                verticalAlign: 'top'
+                , display: 'inline-block'
+                , margin: '1rem 1rem'
+                , minWidth: '800px'
+                , width: 'calc(100vw - 580px)'
+              }}
+              setThis={this.setCenter.bind(this)}
+              left={ this.state.left }
+              loading={this.loading.bind(this)}
+              reload={() => {
+                this.state.top && this.state.top.listKey();
+              }}
+              reloadNode={(node: EtcdNode) => {
+                // this.state.view.left && this.state.view.left.showNode(node);
+              }}
+            />
           </Card>
         </div>
       </div>
