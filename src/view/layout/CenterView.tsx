@@ -203,7 +203,7 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
 
     if (!node || !node.key) {
       return (
-        <Card>
+        <Card style={this.props.style}>
           请选择节点
         </Card>
       );
