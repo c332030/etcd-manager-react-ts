@@ -242,14 +242,16 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
 
     return (
       <div style={this.props.style}>
-        <div style={{
-        }}>
+        <div>
           <Input placeholder="输入关键字进行过滤"
             onChange={ text => this.tree && this.tree.filter(text) }
           />
           <Tree
+            style={{
+              overflowY: 'auto'
+              , maxHeight: 'calc(100vh - 13rem)'
+            }}
             ref={e => this.tree = e}
-            className="filter-tree"
             data={ this.state.nodes }
             options={ this.options }
             nodeKey="key"

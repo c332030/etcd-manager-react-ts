@@ -88,7 +88,7 @@ class Home extends React.Component<PropsTypes, StateTypes> {
           style={{
             verticalAlign: 'top'
             // , width: '90%'
-            // , height: '90vh'
+            , height: 'calc(100vh - 75px)'
             , margin: '2.5rem 2rem 1rem 2rem'
           }}
         >
@@ -102,13 +102,13 @@ class Home extends React.Component<PropsTypes, StateTypes> {
             loading={this.loading.bind(this)}
             listKey={this.listKey.bind(this)}
           />
-          <Card
-            style={{
-              display: 'block'
-              , height: '90%'
-              , marginBottom: '1rem'
-            }}
-          >
+          {/*<Card*/}
+          {/*  style={{*/}
+          {/*    display: 'block'*/}
+          {/*    , height: '90%'*/}
+          {/*    , marginBottom: '1rem'*/}
+          {/*  }}*/}
+          {/*>*/}
             <LeftView
               style={{
                 display: 'inline-block'
@@ -125,7 +125,8 @@ class Home extends React.Component<PropsTypes, StateTypes> {
                 , display: 'inline-block'
                 , margin: '1rem 1rem'
                 , minWidth: '800px'
-                , width: 'calc(100vw - 580px)'
+                , width: 'calc(100vw - 550px)'
+                , overflowY: 'auto'
               }}
               setThis={this.setCenter.bind(this)}
               left={ this.state.left }
@@ -137,7 +138,7 @@ class Home extends React.Component<PropsTypes, StateTypes> {
                 // this.state.view.left && this.state.view.left.showNode(node);
               }}
             />
-          </Card>
+          {/*</Card>*/}
         </div>
       </div>
     );

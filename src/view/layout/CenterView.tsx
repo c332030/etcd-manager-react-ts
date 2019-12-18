@@ -259,6 +259,11 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
           {
             node.dataNodes && node.dataNodes.length > 0 &&
             <Table
+              style={{
+                overflowY: 'auto '
+                // , maxHeight: 'calc(100vh - 21rem)'
+                , height: 'calc(100vh - 21rem)'
+              }}
               columns={this.tableConfig.columns}
               data={node.dataNodes}
             />
