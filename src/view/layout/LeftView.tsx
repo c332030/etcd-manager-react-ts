@@ -222,7 +222,10 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
     this.props.loading(true);
     EtcdService.delete(node, force).then(() => {
 
+      const centerView = this.props.center;
+
       store.remove(node);
+      centerView && centerView.show();
       Notification.success(`删除目录成功：${node.label}`);
     }).catch(handleError).finally(() => {
       this.props.loading(false);
