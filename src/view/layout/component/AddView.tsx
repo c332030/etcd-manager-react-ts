@@ -31,8 +31,6 @@ import {ComponentPropTypes} from "../../../component";
  */
 interface PropTypes extends ComponentPropTypes{
 
-  isJson: boolean
-
   onAdd: Function
 }
 
@@ -127,6 +125,7 @@ class AddView extends React.Component <PropTypes, StateTypes> {
           title="新增"
           size={'tiny'}
           visible={ visible }
+          closeOnClickModal = {false}
           onCancel={ () => this.display.call(this, false) }
         >
           <Dialog.Body>
@@ -167,7 +166,7 @@ class AddView extends React.Component <PropTypes, StateTypes> {
               </Form.Item>
               <ValueView
                 value={value}
-                needFormatJson={this.props.isJson}
+                needFormatJson={this.state.isJson}
 
                 setUpdate={(fun: Function) => {
                   this.setState({

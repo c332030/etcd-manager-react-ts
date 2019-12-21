@@ -212,7 +212,6 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
     return (
       <div style={this.props.style}>
         <AddView
-          isJson={this.state.needFormatJson}
           setThis={ this.setAddView.bind(this) }
           onAdd={(key: string, value: string) => {
             EtcdService.add(this.state.node, key, value, false).then(() => {
