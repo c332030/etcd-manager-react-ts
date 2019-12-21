@@ -231,7 +231,7 @@ export class TopView extends React.Component<PropTypes, StateTypes> {
           fetchSuggestions={ this.querySearch.bind(this) }
           onSelect={(host: UrlFetchSuggest) => {
             this.setState({
-              url: (host as UrlFetchSuggest).url
+              url: Tools.clone((host as UrlFetchSuggest).url)
             });
           }}
         />
