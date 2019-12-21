@@ -7,10 +7,6 @@
  * @date 2019-7-16 15:33
  */
 
-import {
-  debug
-} from '@c332030/common-utils-ts'
-
 import React from 'react';
 import {
   Button
@@ -22,6 +18,11 @@ import {
 import {
   AxiosResponse
 } from 'axios';
+
+import {
+  debug
+  , isArrEmpty
+} from '@c332030/common-utils-ts'
 
 import {
   TreeOptions
@@ -204,8 +205,22 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
     debug(store);
     debug(node);
 
+    if(isArrEmpty(node.nodes)) {
+      this.removeNode(store, node);
+      return;
+    }
+
+    MessageBox.confirm('目录不为空，是否强制删除？').then(() => {
+      this.removeNode(store, node, true);
+    }).catch(() => {
+
+    });
+  }
+
+  removeNode(store: any, node: EtcdNodeBo, force?: boolean) {
+
     this.props.loading(true);
-    EtcdService.delete(node).then(() => {
+    EtcdService.delete(node, force).then(() => {
 
       store.remove(node);
       Notification.success(`删除目录成功：${node.label}`);

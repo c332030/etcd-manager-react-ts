@@ -105,8 +105,9 @@ export class EtcdService {
   /**
    * 修改
    * @param node
+   * @param force
    */
-  public static delete(node?: EtcdNodeBo): Promise<any> {
+  public static delete(node: EtcdNodeBo, force?: boolean): Promise<any> {
 
     // debug('delete');
     // debug(node);
@@ -127,7 +128,7 @@ export class EtcdService {
     }
 
     if(dir) {
-      key = EtcdUtils.operateDir(key);
+      key = EtcdUtils.operateDir(key, force);
     }
 
     return axiosDelete(url + key).then(res => {

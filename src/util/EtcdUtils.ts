@@ -57,9 +57,17 @@ export class EtcdUtils {
   /**
    * 操作目录
    * @param key
+   * @param force
    */
-  public static operateDir(key: string): string {
-    return key + '?dir=true';
+  public static operateDir(key: string, force?: boolean): string {
+
+    const url = key + '?dir=true';
+
+    if(!force) {
+      return url;
+    }
+
+    return url + `&recursive=true`;
   }
 
   /**
