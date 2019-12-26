@@ -170,11 +170,11 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
    */
   append(store: any, etcdNode: EtcdNodeBo) {
 
-    debug('store');
-    debug(store);
+    // debug('store');
+    // debug(store);
 
-    debug('etcdNode');
-    debug(etcdNode);
+    // debug('etcdNode');
+    // debug(etcdNode);
 
     MessageBox.prompt('请输入名称', '提示', {
       inputPattern: /[a-zA-Z0-9]{1,15}/
@@ -201,9 +201,9 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
   }
 
   remove(store: any, node: EtcdNodeBo) {
-    debug('remove');
-    debug(store);
-    debug(node);
+    // debug('remove');
+    // debug(store);
+    // debug(node);
 
     if(isArrEmpty(node.nodes)) {
       this.removeNode(store, node);
@@ -212,9 +212,7 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
 
     MessageBox.confirm('目录不为空，是否强制删除？').then(() => {
       this.removeNode(store, node, true);
-    }).catch(() => {
-
-    });
+    }).catch(() => {});
   }
 
   removeNode(store: any, node: EtcdNodeBo, force?: boolean) {
