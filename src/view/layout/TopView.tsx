@@ -84,7 +84,8 @@ export class TopView extends React.Component<PropTypes, StateTypes> {
 
     // debug(CookieUtils.list());
 
-    const urlsJsonStr = CookieUtils.get(EtcdConstants.COOKIES_URLS);
+    // const urlsJsonStr = CookieUtils.get(EtcdConstants.COOKIES_URLS);
+    const urlsJsonStr = localStorage.getItem(EtcdConstants.COOKIES_URLS);
 
     if(!urlsJsonStr) {
       return;
@@ -163,7 +164,8 @@ export class TopView extends React.Component<PropTypes, StateTypes> {
       urlArr.push(url);
     });
 
-    CookieUtils.set(EtcdConstants.COOKIES_URLS, JSON.stringify(urlArr));
+    localStorage.setItem(EtcdConstants.COOKIES_URLS, JSON.stringify(urlArr));
+    // CookieUtils.set(EtcdConstants.COOKIES_URLS, JSON.stringify(urlArr));
   }
 
   querySearch(host?: string, resolve?: Function) {
