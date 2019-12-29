@@ -9,5 +9,5 @@
 
 export class EtcdConstants {
 
-  public static COOKIES_URLS = 'etcd-urls';
+  public static ETCD_URLS = 'etcd-urls';
 }
