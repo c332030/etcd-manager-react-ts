@@ -214,7 +214,7 @@ export class TopView extends React.Component<PropTypes, StateTypes> {
           }}
           prepend={
             <Select value={ this.state.url.scheme }
-              style={{ width: '5.5rem' }}
+              style={{ width: '5rem' }}
               onChange={
                 scheme => this.setState({
                   url: Object.assign(this.state.url, {
