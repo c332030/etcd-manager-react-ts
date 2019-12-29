@@ -51,6 +51,8 @@ interface PropTypes extends ViewComponentPropTypes {
 interface StateTypes extends ViewComponentStateTypes {
   url: string
 
+  expandKeys: Array<string>
+
   nodes: EtcdNodeBo[]
 }
 
@@ -65,7 +67,8 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
 
   state: StateTypes = {
     url: ''
-    ,nodes: []
+    , expandKeys: []
+    , nodes: []
   };
 
   constructor(props: PropTypes){
@@ -270,9 +273,21 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
             ref={e => this.tree = e}
             data={ this.state.nodes }
             options={ this.options }
+
             nodeKey="key"
-            defaultExpandAll={false}
+
+            // 只展开一个
+            accordion = { true }
+
+            // 不默认展开所有
+            defaultExpandAll={ false }
+
+            // 高亮选中节点
             highlightCurrent={ true }
+
+            // 默认展开的 key,Restful
+            defaultExpandedKeys = { this.state.expandKeys }
+
             filterNodeMethod={(value, data) => {
               if(!value) return true;
               return data.key.indexOf(value) !== -1;
