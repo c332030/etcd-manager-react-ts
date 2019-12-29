@@ -102,18 +102,17 @@ class Home extends React.Component<PropsTypes, StateTypes> {
             loading={this.loading.bind(this)}
             listKey={this.listKey.bind(this)}
           />
-          {/*<Card*/}
-          {/*  style={{*/}
-          {/*    display: 'block'*/}
-          {/*    , height: '90%'*/}
-          {/*    , marginBottom: '1rem'*/}
-          {/*  }}*/}
-          {/*>*/}
+          <div
+            style={{
+              display: 'flex'
+              // , flexWrap: 'wrap'
+            }}
+          >
             <LeftView
               style={{
-                display: 'inline-block'
-                , margin: '1rem 1rem'
-                , width: '400px'
+                margin: '1rem 1rem'
+                , minWidth: '400px'
+                // , width: '400px'
               }}
               setThis={this.setLeft.bind(this)}
               center={ this.state.center }
@@ -122,11 +121,10 @@ class Home extends React.Component<PropsTypes, StateTypes> {
             <CenterView
               style={{
                 verticalAlign: 'top'
-                , display: 'inline-block'
                 , margin: '1rem 1rem'
-                , minWidth: '800px'
-                , width: 'calc(100vw - 550px)'
+                , minWidth: '750px'
                 , overflowY: 'auto'
+                , flexGrow: 1
               }}
               setThis={this.setCenter.bind(this)}
               left={ this.state.left }
@@ -138,7 +136,7 @@ class Home extends React.Component<PropsTypes, StateTypes> {
                 // this.state.view.left && this.state.view.left.showNode(node);
               }}
             />
-          {/*</Card>*/}
+          </div>
         </div>
       </div>
     );
