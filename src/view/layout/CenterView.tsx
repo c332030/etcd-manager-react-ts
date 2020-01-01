@@ -117,16 +117,18 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
       , {
         label: '键'
         , prop: 'label'
-        , width: '300'
+        , width: '280'
       }
       , {
         label: '值'
         , prop: 'value'
-        , minWidth: '400'
+        , minWidth: '350'
       }
       , {
         label: '操作'
         , value: 'key'
+        , align: 'center'
+        , width: '80'
         , render: (node: EtcdNodeBo) => {
 
           // log(node);
@@ -258,11 +260,6 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
           {
             node.dataNodes && node.dataNodes.length > 0 &&
             <Table
-              style={{
-                overflowY: 'auto '
-                // , maxHeight: 'calc(100vh - 21rem)'
-                , height: 'calc(100vh - 21rem)'
-              }}
               columns={this.tableConfig.columns}
               data={node.dataNodes}
             />
