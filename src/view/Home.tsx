@@ -89,7 +89,7 @@ class Home extends React.Component<PropsTypes, StateTypes> {
             verticalAlign: 'top'
             // , width: '90%'
             , height: 'calc(100vh - 75px)'
-            , margin: '2.5rem 2rem 1rem 2rem'
+            , margin: '1.5rem 1rem 0.5rem 1rem'
           }}
         >
           <TopView
