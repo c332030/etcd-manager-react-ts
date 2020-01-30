@@ -179,7 +179,7 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
     // debug('etcdNode');
     // debug(etcdNode);
 
-    MessageBox.prompt('请输入名称', '提示', {
+    MessageBox.prompt('请输入名称', '添加子目录', {
       inputPattern: /[a-zA-Z0-9]{1,15}/
       , inputErrorMessage: '请输入以字母和数字组成的名称'
     }).then((value: any) => {
@@ -243,18 +243,19 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
     // debug(store);
 
     return (
-      <span>
-      <span>
-        <span>{node.label}</span>
-      </span>
-      <span style={{float: 'right', marginRight: '20px'}}>
-        <Button size="mini" onClick={ () => this.append(store, node) }>添加</Button>
-        {
-          !EtcdUtils.isRoot(node) &&
-          <Button size="mini" onClick={ () => this.remove(store, node) }>删除</Button>
-        }
-      </span>
-    </span>);
+      <>
+        <span>
+          <span>{node.label}</span>
+        </span>
+        <span style={{float: 'right', marginRight: '20px'}}>
+          <Button size="mini" onClick={ () => this.append(store, node) }>添加</Button>
+          {
+            !EtcdUtils.isRoot(node) &&
+            <Button size="mini" onClick={ () => this.remove(store, node) }>删除</Button>
+          }
+        </span>
+      </>
+    );
   }
 
   render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
