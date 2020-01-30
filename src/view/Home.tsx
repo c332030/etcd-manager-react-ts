@@ -110,8 +110,8 @@ class Home extends React.Component<PropsTypes, StateTypes> {
           >
             <LeftView
               style={{
-                margin: '1rem 1rem'
-                , minWidth: '400px'
+                margin: '1rem 0 1rem 1rem'
+                , minWidth: '380px'
                 // , width: '400px'
               }}
               setThis={this.setLeft.bind(this)}
