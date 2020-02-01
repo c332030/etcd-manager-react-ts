@@ -101,6 +101,12 @@ export class EtcdService {
     });
   }
 
+  /**
+   * 通讯查询数据
+   * @param url
+   * @param node
+   * @param nodeData
+   */
   public static commForExport(url: string, node: EtcdNode, nodeData: any): Promise<any> {
 
     const { key } = node;
@@ -120,6 +126,8 @@ export class EtcdService {
       childNodes.forEach((childNode) => {
 
         let value;
+
+        // 文件夹需要递归查询
         if(EtcdUtils.isDir(childNode)) {
           // debug('isDir');
           value = {};
@@ -138,6 +146,7 @@ export class EtcdService {
         nodeData[childNodeKey.substr(keyLen)] = value;
       });
 
+      // 递归查询
       return Promise.all(nodeWithDataArr.map(({node, nodeData}) => {
         return this.commForExport(url, node, nodeData);
       }));
