@@ -18,8 +18,7 @@ import {
 } from '@c332030/common-utils-ts'
 
 import {
-  CookieUtils
-  , SchemeEnum
+  HttpSchemeEnum
   , UrlConfig
   , UrlUtils
 } from '@c332030/common-http-ts'
@@ -40,8 +39,8 @@ interface PropTypes extends ViewComponentPropTypes{
  * 支持的 url 协议
  */
 const SCHEMES = [
-  SchemeEnum.HTTP
-  , SchemeEnum.HTTPS
+  HttpSchemeEnum.HTTP
+  , HttpSchemeEnum.HTTPS
 ];
 
 /**
@@ -65,7 +64,7 @@ export class TopView extends React.Component<PropTypes, StateTypes> {
   state = {
 
     url: {
-      scheme: SchemeEnum.HTTP
+      scheme: HttpSchemeEnum.HTTP
       , host: 'localhost'
       , port: 2379
       , path: 'v2/keys'

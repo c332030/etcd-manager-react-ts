@@ -1,7 +1,6 @@
 import React from 'react';
 
 import {
-  Card, Layout,
   Loading
 } from 'element-react'
 
@@ -13,11 +12,9 @@ import {
   , CenterView
 } from './layout';
 
-import {EtcdNode} from "../entity";
-
-import {
-  debug
-} from '@c332030/common-utils-ts'
+// import {
+//   debug
+// } from '@c332030/common-utils-ts'
 import { ViewComponentStateTypes} from "../component";
 
 /**
@@ -131,9 +128,6 @@ class Home extends React.Component<PropsTypes, StateTypes> {
               loading={this.loading.bind(this)}
               reload={() => {
                 this.state.top && this.state.top.listKey();
-              }}
-              reloadNode={(node: EtcdNode) => {
-                // this.state.view.left && this.state.view.left.showNode(node);
               }}
             />
           </div>

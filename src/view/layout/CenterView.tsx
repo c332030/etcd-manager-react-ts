@@ -10,32 +10,28 @@ import React from "react";
 
 import {
   Button, Card
-  , Form
   , Notification
   , Switch
   , Table
 } from "element-react";
 
 import {
-  debug
-  ,isArrEmpty
+  FileUtils
+  // , debug
 } from '@c332030/common-utils-ts'
 
 import {
   EtcdNode
 } from '../../entity'
 
-import ValueView from "./component/ValueView";
-
 import {
-  EtcdUtils,
   handleError,
 } from "../../util";
 import {EtcdService} from "../../service";
 
 import AddView, {IAddView} from "./component/AddView";
 import {EtcdNodeBo} from "../../entity/bo/EtcdNodeBo";
-import {UpdateView} from "./component/UpdateView";
+import {UpdateView} from "./component";
 import {LeftView} from "./LeftView";
 import {ViewComponentPropTypes} from "../../component";
 
@@ -43,9 +39,6 @@ import {ViewComponentPropTypes} from "../../component";
  * Prop 类型
  */
 interface PropTypes extends ViewComponentPropTypes {
-
-  reloadNode: Function
-
   left?: LeftView
 }
 
@@ -199,7 +192,33 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
     this.state.view.addView && this.state.view.addView.display(true, isDir);
   }
 
-  render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
+  /**
+   * 导入
+   */
+  import() {
+
+  }
+
+  /**
+   * 导出
+   */
+  export() {
+    const node = this.state.node;
+
+    if(!node) {
+      Notification.info('无效节点');
+      return;
+    }
+
+    EtcdService.export(node).then((data) => {
+      FileUtils.str2txt(
+        JSON.stringify(data, null, 2)
+        , `${node.label}-${new Date().getTime()}.json`
+      );
+    });
+  }
+
+  render(): React.ReactElement | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
 
     const {node} = this.state;
 
@@ -236,6 +255,14 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
                 <Button onClick={() => {
                   this.add(false)
                 }}>添加值</Button>
+
+                <Button onClick={() => {
+                  this.import()
+                }}>导入</Button>
+
+                <Button onClick={() => {
+                  this.export()
+                }}>导出</Button>
 
                 <Switch
                   value={this.state.needFormatJson}

@@ -1,8 +1,7 @@
 
 import {
   get
-  ,debug
-  , isArrNotEmpty
+  // ,debug
 } from '@c332030/common-utils-ts'
 
 import {
@@ -14,7 +13,12 @@ import {
 
 import {EtcdNode} from "../entity";
 import {EtcdNodeBo} from "../entity/bo/EtcdNodeBo";
+import {EmptyDataException} from "../exception";
 
+interface nodeWithData {
+  node: EtcdNode
+  nodeData: any
+}
 
 /**
  * <p>
@@ -24,43 +28,7 @@ import {EtcdNodeBo} from "../entity/bo/EtcdNodeBo";
  * @version 1.0
  * @date 2019-7-31 10:34
  */
-
 export class EtcdService {
-
-  /**
-   * 列出目录树
-   * @param url
-   */
-  public static list(url: string): Promise<any> {
-
-    if(!url) {
-      return Promise.reject('链接为空');
-    }
-
-    return axiosGet(EtcdUtils.getSortUrl(url)).then(e => {
-
-      let nodes: EtcdNodeBo[] = get(e, 'data.node.nodes', []);
-
-      if(nodes.length > 0) {
-        nodes = EtcdUtils.filterDirNodes(nodes);
-
-        nodes.forEach(node => {
-          node.label = node.key ? node.key.substr(1) : 'No key'
-        });
-      }
-
-      const root: EtcdNodeBo = {
-        key: '/'
-        , label: '/'
-        , dir: true
-        , nodes: nodes
-      };
-
-      return Promise.resolve([root]);
-    }).catch(err => {
-      return Promise.reject(err);
-    });
-  }
 
   /**
    * 加载节点
@@ -86,12 +54,9 @@ export class EtcdService {
           return;
         }
 
-        let index;
-
-        if(EtcdUtils.isRoot(node)) {
-          index = 1;
-        } else {
-          index = key.length + 1;
+        let index = 1;
+        if(EtcdUtils.isNotRoot(node)) {
+          index += key.length;
         }
 
         // 处理 key 生成 label，避免 key 太长，使用 label 显示
@@ -99,6 +64,83 @@ export class EtcdService {
       });
 
       return Promise.resolve(childNodes);
+    });
+  }
+
+  /**
+   * 递归查询所有
+   */
+  public static export(node: EtcdNodeBo): Promise<any> {
+
+    const { key, url } = node;
+
+    // debug(`key= ${key}`);
+
+    if(!key || !url) {
+      throw new EmptyDataException();
+    }
+
+    const data: any = {};
+    let nodeData = data;
+    if(EtcdUtils.isNotRoot(node)) {
+
+      // 创建当前节点及其父级的数据层次
+      key.split('/').forEach((shortKey, index) => {
+
+        if(index === 0) {
+          return;
+        }
+
+        // debug(`shortKey= ${shortKey}`);
+        nodeData = nodeData[shortKey] = {};
+      });
+    }
+
+    return this.commForExport(url, node, nodeData).then(() => {
+      return Promise.resolve(data);
+    });
+  }
+
+  public static commForExport(url: string, node: EtcdNode, nodeData: any): Promise<any> {
+
+    const { key } = node;
+    if(!key) {
+      throw new EmptyDataException();
+    }
+
+    return axiosGet(url + key).then(e => {
+      const childNodes: EtcdNodeBo[] = get(e, 'data.node.nodes', []);
+
+      // debug('childNodes');
+      // debug(childNodes);
+
+      const keyLen = key.length + 1;
+
+      const nodeWithDataArr: Array<nodeWithData> = [];
+      childNodes.forEach((childNode) => {
+
+        let value;
+        if(EtcdUtils.isDir(childNode)) {
+          // debug('isDir');
+          value = {};
+          nodeWithDataArr.push({
+            node: childNode
+            , nodeData: value
+          });
+        } else {
+          value = childNode.value;
+        }
+
+        let childNodeKey = childNode.key;
+        if(!childNodeKey) {
+          return;
+        }
+        nodeData[childNodeKey.substr(keyLen)] = value;
+      });
+
+      return Promise.all(nodeWithDataArr.map(({node, nodeData}) => {
+        return this.commForExport(url, node, nodeData);
+      }));
     });
   }
 

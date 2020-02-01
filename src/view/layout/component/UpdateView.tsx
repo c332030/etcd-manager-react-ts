@@ -2,7 +2,6 @@ import React from "react";
 import {EtcdNodeBo} from "../../../entity/bo/EtcdNodeBo";
 import {Button, Form} from "element-react";
 import ValueView from "./ValueView";
-import {ComponentPropTypes} from "../../../component";
 
 /**
  * Prop 类型

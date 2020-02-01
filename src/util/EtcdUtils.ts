@@ -25,11 +25,27 @@ export class EtcdUtils {
   }
 
   /**
+   * 是否不是根节点
+   * @param node
+   */
+  public static isNotRoot(node: EtcdNode | string): boolean {
+    return !this.isRoot(node);
+  }
+
+  /**
    * 是否是目录
    * @param node
    */
   public static isDir(node: EtcdNode): boolean {
     return node.dir || EtcdUtils.isRoot(node);
+  }
+
+  /**
+   * 是否不是目录
+   * @param node
+   */
+  public static isNotDir(node: EtcdNode): boolean {
+    return !this.isDir(node);
   }
 
   /**

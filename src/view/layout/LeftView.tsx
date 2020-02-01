@@ -16,12 +16,8 @@ import {
 } from "element-react";
 
 import {
-  AxiosResponse
-} from 'axios';
-
-import {
-  debug
-  , isArrEmpty
+  isArrEmpty
+  // , debug
 } from '@c332030/common-utils-ts'
 
 import {
@@ -37,7 +33,7 @@ import {
 } from "./CenterView";
 
 import {EtcdService} from "../../service";
-import {EtcdUtils, handleError, ReactTsUtils} from "../../util";
+import {EtcdUtils, handleError} from "../../util";
 import {EtcdNodeBo} from "../../entity/bo/EtcdNodeBo";
 import {ViewComponentPropTypes, ViewComponentStateTypes} from "../../component";
 
@@ -250,7 +246,7 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
         <span style={{float: 'right', marginRight: '20px'}}>
           <Button size="mini" onClick={ () => this.append(store, node) }>添加</Button>
           {
-            !EtcdUtils.isRoot(node) &&
+            EtcdUtils.isNotRoot(node) &&
             <Button size="mini" onClick={ () => this.remove(store, node) }>删除</Button>
           }
         </span>
