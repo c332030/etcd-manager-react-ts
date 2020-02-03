@@ -17,6 +17,7 @@ import {
 
 import {
   FileUtils
+  , DateUtils
   // , debug
 } from '@c332030/common-utils-ts'
 
@@ -34,12 +35,15 @@ import {EtcdNodeBo} from "../../entity/bo/EtcdNodeBo";
 import {UpdateView} from "./component";
 import {LeftView} from "./LeftView";
 import {ViewComponentPropTypes} from "../../component";
+import {ImportView} from "./component/ImportView";
 
 /**
  * Prop 类型
  */
 interface PropTypes extends ViewComponentPropTypes {
   left?: LeftView
+
+  reloadLeft: ()=>void
 }
 
 /**
@@ -63,6 +67,11 @@ interface StateTypes {
   view: {
     addView?: IAddView
   }
+
+  /**
+   * 导入页面是否显示
+   */
+  importViewVisible: boolean
 }
 
 /**
@@ -75,6 +84,7 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
     , needFormatJson: true
 
     ,view: {}
+    , importViewVisible: false
   };
 
   tableConfig: any = {
@@ -169,19 +179,22 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
   }
 
   reload(node?: EtcdNodeBo) {
-    // this.setState({
-    //   node: undefined
-    // });
-    // this.props.reload();
 
     const left = this.props.left;
     if(!left) {
       throw Error('leftView is not exist');
     }
 
+    this.show();
+
     left.loadNode({
       data: node
     });
+  }
+
+  reloadLeft() {
+    this.show();
+    this.props.reloadLeft();
   }
 
   /**
@@ -196,7 +209,9 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
    * 导入
    */
   import() {
-
+    this.setState({
+      importViewVisible: true
+    });
   }
 
   /**
@@ -210,11 +225,23 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
       return;
     }
 
+    this.props.loading(true);
+
     EtcdService.export(node).then((data) => {
+
+      let name = node.label;
+      if(name) {
+        name.replace('/', '\\');
+      } else {
+        name = 'etcd'
+      }
+
       FileUtils.str2txt(
         JSON.stringify(data, null, 2)
-        , `${node.label}-${new Date().getTime()}.json`
+        , `${name}-${DateUtils.DateTimeFormat(new Date())}.json`
       );
+    }).catch(handleError).finally(() => {
+      this.props.loading(false);
     });
   }
 
@@ -242,6 +269,16 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
             }).catch(handleError);
           }}
         />
+        <ImportView
+          visible={this.state.importViewVisible}
+          node={ this.state.node }
+          hide={ () => {
+            this.setState({
+              importViewVisible: false
+            });
+          }}
+          reload={this.reloadLeft.bind(this)}
+        />
         <Card
           header={
             <>
@@ -257,7 +294,7 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
                 }}>添加值</Button>
 
                 <Button onClick={() => {
-                  this.import()
+                  this.import.call(this)
                 }}>导入</Button>
 
                 <Button onClick={() => {

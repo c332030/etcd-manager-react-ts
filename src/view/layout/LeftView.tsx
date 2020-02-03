@@ -42,6 +42,8 @@ import {ViewComponentPropTypes, ViewComponentStateTypes} from "../../component";
  */
 interface PropTypes extends ViewComponentPropTypes {
   center?: CenterView
+
+  setReloadLeft: (fun: Function)=>void
 }
 
 interface StateTypes extends ViewComponentStateTypes {
@@ -70,9 +72,14 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
   constructor(props: PropTypes){
     super(props);
 
-    this.props.setThis(this);
-
     this.listKey.bind(this);
+
+    this.props.setThis(this);
+    this.props.setReloadLeft(this.reload.bind(this));
+  }
+
+  public reload() {
+    this.listKey(this.state.url);
   }
 
   /**
@@ -80,7 +87,6 @@ export class LeftView extends React.Component<PropTypes, StateTypes>{
    * @param url Edcd 链接
    */
   public listKey(url: string) {
-    console.log(`LeftView url= ${url}`);
 
     this.setState({
       url: url

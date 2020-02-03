@@ -33,6 +33,8 @@ interface StateTypes extends ViewComponentStateTypes{
   top?: TopView
   left?: LeftView
   center?: CenterView
+
+  reloadLeft?: Function
 }
 
 class Home extends React.Component<PropsTypes, StateTypes> {
@@ -70,13 +72,18 @@ class Home extends React.Component<PropsTypes, StateTypes> {
   }
 
   listKey(url: string) {
-    // console.log(`是吧 url= ${url}`);
-
-    let left: LeftView | undefined = this.state.left;
-    left && left.listKey(url);
+    this.state.left?.listKey(url);
   }
 
-  render(): React.ReactElement<any, string | React.JSXElementConstructor<any>> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
+  /**
+   * 左侧页面重载
+   */
+  reloadLeft() {
+    const reloadLeft = this.state?.reloadLeft;
+    reloadLeft && reloadLeft();
+  }
+
+  render(): React.ReactElement | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
 
     return (
       <div>
@@ -114,6 +121,11 @@ class Home extends React.Component<PropsTypes, StateTypes> {
               setThis={this.setLeft.bind(this)}
               center={ this.state.center }
               loading={this.loading.bind(this)}
+              setReloadLeft={(reloadLeft: Function) => {
+                this.setState({
+                  reloadLeft: reloadLeft
+                });
+              }}
             />
             <CenterView
               style={{
@@ -127,8 +139,9 @@ class Home extends React.Component<PropsTypes, StateTypes> {
               left={ this.state.left }
               loading={this.loading.bind(this)}
               reload={() => {
-                this.state.top && this.state.top.listKey();
+                this.state.top?.listKey();
               }}
+              reloadLeft={this.reloadLeft.bind(this)}
             />
           </div>
         </div>

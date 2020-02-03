@@ -68,6 +68,54 @@ export class EtcdService {
   }
 
   /**
+   * 数据导入
+   *
+   * @param data
+   * @param url
+   */
+  public static import(data: any, url: string): Promise<any> {
+
+    // if(url === '/') {
+    //   debug('full data');
+    //   debug(data);
+    // }
+
+    let entries = Object.entries(data);
+    if(entries.length === 0) {
+      return Promise.resolve();
+    }
+
+    let nodeData = data;
+    while (entries.length === 1) {
+
+      let [keyFirst, valueFirst] = entries[0];
+
+      nodeData = valueFirst;
+      if(typeof nodeData === 'string') {
+        break;
+      }
+      url += `${keyFirst}/`;
+      entries = Object.entries(nodeData);
+
+      if(entries.length === 0) {
+        return Promise.resolve();
+      }
+    }
+
+    // debug(`url: ${url}`);
+    // debug(`nodeData: `);
+    // debug(nodeData);
+
+    return Promise.all(entries.map(([key, value]) => {
+
+      let keyUrl = url + `${key}/`;
+      return typeof value === 'string'
+        ? this.put(keyUrl, value)
+        : this.import(value, keyUrl);
+    }));
+  }
+
+  /**
    * 递归查询所有
    */
   public static export(node: EtcdNodeBo): Promise<any> {
@@ -96,7 +144,7 @@ export class EtcdService {
       });
     }
 
-    return this.commForExport(url, node, nodeData).then(() => {
+    return this.getForExport(url, node, nodeData).then(() => {
       return Promise.resolve(data);
     });
   }
@@ -107,7 +155,7 @@ export class EtcdService {
    * @param node
    * @param nodeData
    */
-  public static commForExport(url: string, node: EtcdNode, nodeData: any): Promise<any> {
+  public static getForExport(url: string, node: EtcdNode, nodeData: any): Promise<any> {
 
     const { key } = node;
     if(!key) {
@@ -120,7 +168,10 @@ export class EtcdService {
       // debug('childNodes');
       // debug(childNodes);
 
-      const keyLen = key.length + 1;
+      let keyLen = key.length;
+      if(key !== '/') {
+        keyLen++;
+      }
 
       const nodeWithDataArr: Array<nodeWithData> = [];
       childNodes.forEach((childNode) => {
@@ -148,7 +199,7 @@ export class EtcdService {
 
       // 递归查询
       return Promise.all(nodeWithDataArr.map(({node, nodeData}) => {
-        return this.commForExport(url, node, nodeData);
+        return this.getForExport(url, node, nodeData);
       }));
     });
   }
