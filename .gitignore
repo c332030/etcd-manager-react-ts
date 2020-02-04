@@ -6,9 +6,8 @@ node_modules
 
 
 # production
-build
-target
-
+build*
+target*
 
 # Project Files
 .idea
