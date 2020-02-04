@@ -272,12 +272,14 @@ export class CenterView extends React.Component<PropTypes, StateTypes> {
         <ImportView
           visible={this.state.importViewVisible}
           node={ this.state.node }
+
+          loading={this.props.loading}
+          reload={this.reloadLeft.bind(this)}
           hide={ () => {
             this.setState({
               importViewVisible: false
             });
           }}
-          reload={this.reloadLeft.bind(this)}
         />
         <Card
           header={

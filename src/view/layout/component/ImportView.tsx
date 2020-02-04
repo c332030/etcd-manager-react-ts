@@ -13,6 +13,8 @@ interface PropsType {
   hide: ()=>void
   reload: ()=>void
 
+  loading: Function
+
   node?: EtcdNodeBo
 }
 
@@ -40,6 +42,8 @@ export const ImportView: React.FC<PropsType> = (props) => {
               // debug('when select file');
               // debug(file);
 
+              props.loading(true);
+
               const reader = new FileReader();
               reader.readAsText(file,'utf-8');
 
@@ -48,7 +52,7 @@ export const ImportView: React.FC<PropsType> = (props) => {
               reader.onload = () => {
 
                 const jsonStr = reader.result;
-                debug(jsonStr);
+                // debug(jsonStr);
 
                 try {
 
@@ -67,6 +71,7 @@ export const ImportView: React.FC<PropsType> = (props) => {
                 } finally {
                   props.hide();
                   props.reload();
+                  props.loading(false);
                 }
               };
 
