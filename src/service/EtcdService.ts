@@ -91,7 +91,7 @@ export class EtcdService {
       let [keyFirst, valueFirst] = entries[0];
 
       nodeData = valueFirst;
-      if(typeof nodeData === 'string') {
+      if(typeof nodeData !== 'object') {
         break;
       }
       url += `${keyFirst}/`;
@@ -109,9 +109,9 @@ export class EtcdService {
     return Promise.all(entries.map(([key, value]) => {
 
       let keyUrl = url + `${key}/`;
-      return typeof value === 'string'
-        ? this.put(keyUrl, value)
-        : this.import(value, keyUrl);
+      return typeof value === 'object'
+        ? this.import(value, keyUrl)
+        : this.put(keyUrl, String(value));
     }));
   }
 
