@@ -25,25 +25,25 @@ ETCD v2 的 Web管理工具，不依赖后台
 ## 界面展示
 
 ### 主页
-![主页](doc/images/preview/主页.jpg)
+![主页](.readme_images/主页.jpg)
 
 ### 导入
-![导入](doc/images/preview/导入.jpg)
+![导入](.readme_images/导入.jpg)
 
 ### 添加目录
-![添加目录](doc/images/preview/添加目录.jpg)
+![添加目录](.readme_images/添加目录.jpg)
 
 ### 删除目录
-![删除目录](doc/images/preview/删除目录.jpg)
+![删除目录](.readme_images/删除目录.jpg)
 
 ### 添加值-字符串
-![添加值](doc/images/preview/添加值-字符串.jpg)
+![添加值](.readme_images/添加值-字符串.jpg)
 
 ### 添加值-json
-![添加值](doc/images/preview/添加值-json.jpg)
+![添加值](.readme_images/添加值-json.jpg)
 
 ### 值预览-json
-![值预览](doc/images/preview/值预览-json.jpg)
+![值预览](.readme_images/值预览-json.jpg)
 
 ### 值预览-json-展开
-![值预览](doc/images/preview/值预览-json-展开.jpg)
+![值预览](.readme_images/值预览-json-展开.jpg)
