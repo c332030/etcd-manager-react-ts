@@ -1,6 +1,6 @@
 /**
  * <p>
- *   Description: EtcdValue mopon 值类型
+ *   Description: EtcdValue 值类型
  * </p>
  * @author c332030（袁兴旺）
  * @version 1.0

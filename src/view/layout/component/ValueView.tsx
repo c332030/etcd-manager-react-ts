@@ -55,7 +55,7 @@ interface StateTypes {
 
 /**
  * <p>
- *   Description: MoponEtcdValueView
+ *   Description: ValueView
  * </p>
  * @author c332030（袁兴旺）
  * @version 1.0
