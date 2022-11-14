@@ -5,6 +5,8 @@ ETCD v2 的 Web管理工具，不依赖后台
 
 只需要一个服务器（express or nginx）部署静态项目并代理转发请求，处理跨域
 
+github pages example: https://cc332030.github.io/etcd-manager-react-ts/
+
 ## 使用步骤
 
 脚本和配置文件见 lib
