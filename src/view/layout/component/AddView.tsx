@@ -9,17 +9,12 @@ import {
 } from "element-react";
 
 import {
-  Tools
-  // ,debug
-} from 'util'
+  Tools, ReactUtils
+} from '../../../util'
 
 import {
   KeyValueEnum
 } from 'enums'
-
-import {
-  ReactUtils
-} from 'util'
 
 import ValueView from "./ValueView";
 import {ComponentPropTypes} from "component";

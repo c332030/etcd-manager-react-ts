@@ -3,7 +3,7 @@ import {Dialog, Notification, Upload} from "element-react";
 import {EtcdNodeBo} from "entity/bo/EtcdNodeBo";
 
 import {EtcdService} from "service";
-import { handleError } from "util";
+import { handleError } from "../../../util";
 
 /**
  * Props 类型
@@ -57,7 +57,11 @@ export const ImportView: React.FC<PropsType> = (props) => {
 
                 try {
 
-                  const url = props.node?.url;
+                  let url = undefined;
+                  if(props.node) {
+                    url = props.node.url;
+                  }
+
                   if(!url) {
                     Notification.error('链接不存在');
                     return;

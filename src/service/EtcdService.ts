@@ -2,14 +2,14 @@
 import {
   get
   // ,debug
-} from 'util'
+} from '../util'
 
 import {
   axiosGet
   ,axiosPut
   ,axiosDelete
   ,EtcdUtils
-} from "util";
+} from "../util";
 
 import {EtcdNode} from "entity";
 import {EtcdNodeBo} from "entity/bo/EtcdNodeBo";

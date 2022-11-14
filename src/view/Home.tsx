@@ -72,14 +72,16 @@ class Home extends React.Component<PropsTypes, StateTypes> {
   }
 
   listKey(url: string) {
-    this.state.left?.listKey(url);
+
+    const left = this.state.left;
+    left && left.listKey(url);
   }
 
   /**
    * 左侧页面重载
    */
   reloadLeft() {
-    const reloadLeft = this.state?.reloadLeft;
+    const reloadLeft = this.state.reloadLeft;
     reloadLeft && reloadLeft();
   }
 
@@ -139,7 +141,8 @@ class Home extends React.Component<PropsTypes, StateTypes> {
               left={ this.state.left }
               loading={this.loading.bind(this)}
               reload={() => {
-                this.state.top?.listKey();
+                const top = this.state.top;
+                top && top.listKey();
               }}
               reloadLeft={this.reloadLeft.bind(this)}
             />

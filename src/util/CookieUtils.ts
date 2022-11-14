@@ -9,7 +9,7 @@
 
 import {
   Tools
-} from 'util';
+} from '.';
 
 export class CookieUtils {
 

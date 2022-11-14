@@ -19,7 +19,7 @@ import {
   FileUtils
   , DateUtils
   // , debug
-} from 'util'
+} from '../../util'
 
 import {
   EtcdNode
@@ -27,7 +27,7 @@ import {
 
 import {
   handleError,
-} from "util";
+} from "../../util";
 
 import {EtcdService} from "service";
 

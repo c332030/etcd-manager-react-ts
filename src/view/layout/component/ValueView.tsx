@@ -10,17 +10,12 @@ import {
   Tools
   , dealStrNull
   , log
-  , get
-  // , debug
-} from 'util'
+  , get, ReactUtils
+} from '../../../util'
 
 import {
   KeyValueEnum
 } from 'enums'
-
-import {
-  ReactUtils
-} from 'util'
 
 import {
   EtcdValue
