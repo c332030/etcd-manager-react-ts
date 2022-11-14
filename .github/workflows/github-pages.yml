@@ -26,8 +26,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16.x'
-      - name: Build with yarn
-        run: npm i && npm run build
+      - name: Build
+        run: yarn && yarn build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
