@@ -14,7 +14,6 @@
     "element-react": "1.4.34",
     "element-theme-default": "1.4.13",
     "express": "4.17.1",
-    "node-sass": "4.13.0",
     "react": "16.8.6",
     "react-dom": "16.8.6",
     "react-hot-loader": "4.12.6",

@@ -19,22 +19,23 @@ import {
   FileUtils
   , DateUtils
   // , debug
-} from '@c332030/common-utils-ts'
+} from 'util'
 
 import {
   EtcdNode
-} from '../../entity'
+} from 'entity'
 
 import {
   handleError,
-} from "../../util";
-import {EtcdService} from "../../service";
+} from "util";
+
+import {EtcdService} from "service";
 
 import AddView, {IAddView} from "./component/AddView";
-import {EtcdNodeBo} from "../../entity/bo/EtcdNodeBo";
+import {EtcdNodeBo} from "entity/bo/EtcdNodeBo";
 import {UpdateView} from "./component";
 import {LeftView} from "./LeftView";
-import {ViewComponentPropTypes} from "../../component";
+import {ViewComponentPropTypes} from "component";
 import {ImportView} from "./component/ImportView";
 
 /**

@@ -14,8 +14,8 @@ import {
 
 // import {
 //   debug
-// } from '@c332030/common-utils-ts'
-import { ViewComponentStateTypes} from "../component";
+// } from 'util'
+import { ViewComponentStateTypes} from "component";
 
 /**
  * Props 类型定义

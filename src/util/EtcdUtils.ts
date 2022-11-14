@@ -1,5 +1,5 @@
 
-import {EtcdNode} from "../entity";
+import {EtcdNode} from "entity";
 
 /**
  * <p>

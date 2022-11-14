@@ -18,24 +18,24 @@ import {
 import {
   isArrEmpty
   // , debug
-} from '@c332030/common-utils-ts'
+} from 'util'
 
 import {
   TreeOptions
-} from '@c332030/common-element-ui-ts'
+} from 'entity'
 
 import {
   EtcdNode
-} from "../../entity";
+} from "entity";
 
 import {
   CenterView
 } from "./CenterView";
 
-import {EtcdService} from "../../service";
-import {EtcdUtils, handleError} from "../../util";
-import {EtcdNodeBo} from "../../entity/bo/EtcdNodeBo";
-import {ViewComponentPropTypes, ViewComponentStateTypes} from "../../component";
+import {EtcdService} from "service";
+import {EtcdUtils, handleError} from "util";
+import {EtcdNodeBo} from "entity/bo/EtcdNodeBo";
+import {ViewComponentPropTypes, ViewComponentStateTypes} from "component";
 
 /**
  * Prop 类型

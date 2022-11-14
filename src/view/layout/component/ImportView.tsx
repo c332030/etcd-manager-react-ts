@@ -1,9 +1,10 @@
 import React from "react";
 import {Dialog, Notification, Upload} from "element-react";
-import {EtcdNodeBo} from "../../../entity/bo/EtcdNodeBo";
-import { debug } from "@c332030/common-utils-ts";
-import {EtcdService} from "../../../service";
-import {handleError} from "../../../util";
+import {EtcdNodeBo} from "entity/bo/EtcdNodeBo";
+
+import {EtcdService} from "service";
+import { handleError } from "util";
+
 /**
  * Props 类型
  */

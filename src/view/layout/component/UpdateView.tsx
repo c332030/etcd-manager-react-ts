@@ -1,5 +1,5 @@
 import React from "react";
-import {EtcdNodeBo} from "../../../entity/bo/EtcdNodeBo";
+import {EtcdNodeBo} from "entity/bo/EtcdNodeBo";
 import {Button, Form} from "element-react";
 import ValueView from "./ValueView";
 

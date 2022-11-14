@@ -16,11 +16,11 @@ import axios, {
 
 import {
   log
-  ,get
+  , get
   // ,notEmpty
-} from '@c332030/common-utils-ts'
+} from '.'
 
-import {EtcdConfig} from "../entity/vo/EtcdConfig";
+import {EtcdConfig} from "entity/vo/EtcdConfig";
 
 const configJsonUrl = 'config.json';
 

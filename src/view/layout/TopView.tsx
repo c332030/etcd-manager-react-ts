@@ -15,16 +15,19 @@ import {
   isArrEmpty
   , debug
   , Tools
-} from '@c332030/common-utils-ts'
+  , UrlUtils
+} from 'util'
 
 import {
   HttpSchemeEnum
-  , UrlConfig
-  , UrlUtils
-} from '@c332030/common-http-ts'
+} from 'enums'
 
-import {ViewComponentPropTypes} from "../../component";
-import {EtcdConstants} from "../../model/constant";
+import {
+  UrlConfig
+} from 'entity'
+
+import {ViewComponentPropTypes} from "component";
+import {EtcdConstants} from "model/constant";
 
 interface StateTypes {
   url?: UrlConfig

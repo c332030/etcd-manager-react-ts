@@ -5,7 +5,7 @@ import {
   debug
   ,get
   ,getNullable
-} from '@c332030/common-utils-ts'
+} from '.'
 
 /**
  * <p>

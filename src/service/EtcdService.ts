@@ -2,18 +2,18 @@
 import {
   get
   // ,debug
-} from '@c332030/common-utils-ts'
+} from 'util'
 
 import {
   axiosGet
   ,axiosPut
   ,axiosDelete
   ,EtcdUtils
-} from "../util";
+} from "util";
 
-import {EtcdNode} from "../entity";
-import {EtcdNodeBo} from "../entity/bo/EtcdNodeBo";
-import {EmptyDataException} from "../exception";
+import {EtcdNode} from "entity";
+import {EtcdNodeBo} from "entity/bo/EtcdNodeBo";
+import {EmptyDataException} from "exception";
 
 interface nodeWithData {
   node: EtcdNode

@@ -12,19 +12,19 @@ import {
   , log
   , get
   // , debug
-} from '@c332030/common-utils-ts'
+} from 'util'
 
 import {
   KeyValueEnum
-} from '@c332030/common-constant-ts'
+} from 'enums'
 
 import {
   ReactUtils
-} from '@c332030/common-react-ts'
+} from 'util'
 
 import {
   EtcdValue
-} from '../../../entity'
+} from 'entity'
 
 /**
  * Prop 类型

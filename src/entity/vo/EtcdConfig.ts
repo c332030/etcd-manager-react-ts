@@ -9,6 +9,6 @@
 
 import {
   AxiosConfig
-} from '@c332030/common-http-ts'
+} from 'entity'
 
 export interface EtcdConfig extends AxiosConfig {}
