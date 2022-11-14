@@ -1,7 +1,7 @@
 
-# Etcd Of React
+# Etcd Manager Of React
 
-ETCD v2 的 Web管理工具，不依赖后台
+ETCD v2 的 Web 管理工具，不依赖后台
 
 只需要一个服务器（express or nginx）部署静态项目并代理转发请求，处理跨域
 
