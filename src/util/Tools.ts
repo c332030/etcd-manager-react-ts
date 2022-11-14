@@ -56,7 +56,7 @@ export class Tools{
    * @param defaultValue
    */
   public static dealNull<E>(obj: E | undefined | null, defaultValue: E): E {
-    return isNull(obj) ? defaultValue : <E>obj;
+    return isNull(obj) ? defaultValue : obj as E;
   }
 
   /**
@@ -65,7 +65,7 @@ export class Tools{
    * @param defaultValue
    */
   public static dealEmpty<E>(obj: E | null | undefined, defaultValue: E): E {
-    return isEmpty(obj) ? defaultValue : <E>obj;
+    return isEmpty(obj) ? defaultValue : obj as E;
   }
 
   /**

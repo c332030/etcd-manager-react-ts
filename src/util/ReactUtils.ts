@@ -7,7 +7,6 @@
  * @date 2019-7-26 15:20
  */
 import {SyntheticEvent} from "react";
-import {types} from "util";
 
 /**
  * React Utils
@@ -29,7 +28,7 @@ export class ReactUtils {
     const typeStr = typeof value;
 
     if(typeStr === 'string') {
-      return <string>value;
+      return value as string;
     }
 
     return typeStr;
